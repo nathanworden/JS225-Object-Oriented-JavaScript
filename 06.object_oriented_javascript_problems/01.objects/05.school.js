@@ -72,20 +72,28 @@ school = {
     });
   },
   courseReport(courseName) {
-    console.log("=" + courseName + " Grades" + "=");
     let scoreTotal = 0;
     let totalGrades = 0;
+    let noGradesExist = true;
     this.students.forEach(student => {
       student.courses.forEach(course => {
         if (course.name === courseName) {
-          console.log(student.name + ": " + course.grade);
-          scoreTotal += course.grade;
-          totalGrades += 1;
+          if (course.grade) {
+            console.log(student.name + ": " + course.grade);
+            scoreTotal += course.grade;
+            totalGrades += 1;
+            noGradesExist = false;
+          }
         }
       });
     });
-    console.log('---');
-    console.log('Course Average: ' + scoreTotal / totalGrades);
+    if (noGradesExist) {
+      console.log('undefined');
+    } else {
+      console.log("=" + courseName + " Grades" + "=");
+      console.log('---');
+      console.log('Course Average: ' + scoreTotal / totalGrades);
+    }
   },
 
 }
