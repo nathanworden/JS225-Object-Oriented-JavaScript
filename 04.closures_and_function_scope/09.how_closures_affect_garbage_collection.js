@@ -1,0 +1,3 @@
+// // When no references to the object or value remain in a program, its eligible for garbage collection
+
+// When you create a closure, it stores a reference to all varibales it can access. Each of those variables referecnes an object or primitive value. Theoretically, as long as the closure exists, those variables remain in existence, which means that the objects or values they reference must also endure.

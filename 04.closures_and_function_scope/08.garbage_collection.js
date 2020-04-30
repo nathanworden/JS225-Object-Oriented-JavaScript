@@ -1,0 +1,1 @@
+The process of automatically freeing memory is called garbage collection
