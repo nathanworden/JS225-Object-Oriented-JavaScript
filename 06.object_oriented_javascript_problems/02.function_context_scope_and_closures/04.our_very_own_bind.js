@@ -1,5 +1,5 @@
 function myBind(func, context) {
   return function() {
-    func.apply(context, arguments);
+    return func.apply(context, arguments);
   }
 }
