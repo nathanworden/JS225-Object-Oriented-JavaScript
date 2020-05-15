@@ -47,6 +47,8 @@
 
 Every time a JavaScript function is invoked, it has access to an object called the **execution context** of that function. This execution context is accessible through the keyword `this`. A JavaScript function can be invoked in a variety of ways. Which object `this` refers to depends on how the function was invoked.
 
+Note: Anywhere outside a functino, the keyword `this` is bound to the global object. If the `this` keyword is used inside a function, then its value depends on how the function was invoked.
+
 #### Implicit function execution context
 
 - The implicit *function* execution context is the context for a function that you invoke without supplying an explicit context. JavaScript binds such functions to the global object.
@@ -459,6 +461,9 @@ obj.foo();
 
 #### Creating and using private data
 
+- Closures let a function access any variable that was in scope when the function was defined.
+- You can use closures to make variables "private" to a function, or set of functions, and inaccessible elsewhere.
+- Closures allow functions to "carry around" values for later use.
 - Functions close over or enclose the context at their definition point, so we call them closures. They always have access to that context, regardless of when and where the program invokes the function. Here's some code that uses a closure to increment and log a number with each call:
 
 ```javascript
@@ -524,6 +529,7 @@ How can you set thevalue of `systemStatus` to the value of the inner variable `s
 
 #### Garbage collection
 
+- Values that are no longer accessible from anywhere in the code are eligible for **garbage collection** which frees up the memory that they used for reuse by other parts of the program.
 - In JavaScript, values are allocated memory when it is created and, it is eventually, "automatically" freed up when it is not in use. This process of "automatically" freeing memory up is called **garbage collection**. As developers, we don't often have to worry about managing memory, though we sometimes need to concern ourserlves with how much memory we use.
 - When there are no variables, objects, or closures that maintain a reference to the object or value, JavaScript marks the memory as eligible for Garbage Collection. As long as the object or value remains accessible, JavaScript can't and won't garbage collect it.
 - You may sometime shear it said that garbage collection occurs when a variable goes out of scope. That's wrong; a variable can go out of scope but references to the object or value that it references may still exist elsewhere. Of course, if the variable is the sole remaining reference to the object or value, then it does become eligible for garbage collection.
@@ -549,6 +555,102 @@ foo();
 ​		 - Answer: Neither value is eligible for garbage collection on line 5, while `"A string"` is eligible for garbalge collection on line 10. In the context of this code snippet, the only references to these values are provided by the variables `myNum` and `myStr`. Since `myNum` is a global variable, its reference to `1` persists at every point in the code after assignment, but since `myStr` is function scoped, the variable's reference to `"A string"` is broken after the function execution is complete.
 
 #### IIFEs
+
+- An immediatley invoked function expression (IIFE) is a function that we define and invoke simultaneously. It looks like this;
+
+```javascript
+(function() {
+  console.log('hello');
+})();												// => hello
+```
+
+This syntax adds a pair of parentheses around the function expression, and the parentheses at the end invoke the function. The extra parentheses around the function expression are important- without them, we can't imvoke the function right away:
+
+```javascript
+function() {
+  console.log('hello');
+}();											// SyntaxError: Unexpected token
+```
+
+- With IIFEs, we use the parentheses to make it explicit that we want to parse the function definition as an expression. As an expression it means that there is a value returned- the function- that we can immediatley "invoke".
+- All functions, including IIFEs, can take arguments and return values:
+
+```javascript
+(function(a) {
+  return a + 1;
+})(2);						// 3
+```
+
+- We can omit the parentheses around an IIFE when the function definition is an expressino that doesn't occur at the beginning of a line.
+
+```javascript
+var foo = function() {
+  return function() {
+    return 10;
+  }();
+}();
+
+console.log(foo);				// => 10
+```
+
+##### Creating a Private Scope with an IIFE
+
+- Imagine that you need to add some code to a large and messy JavaScript program. What problems might you run into? Answer: Your new variables and functions might already exist in the global scope. You would alter existing variables of the same name and overright functions of the same name. What can you do? Use an IIFE. The IFFE provides a private scope for your variables and won't clash with any other functions. We can also pass values into the IIFE as arguments during invocation:
+
+```javascript
+// thousands of lines of messy JavaScript code!
+
+(function(number) {
+  for (var i = 0; i < number; i += 1) {
+    console.log(i);
+  }
+})(100);
+
+// more messy JavaScript code
+```
+
+##### Creating Private Data with an IIFE
+
+###### Using an IIFE to Return a Function with Access to Private Data
+
+- As we have seen earlier, we can create private data with the use of closures. We could extend this concept and use it with an IIFE. With an IIFE we can make functions and objects that have access to private data.
+
+```javascript
+var generateStudentId = (function() {
+  var studentID = 0;
+  
+  return function() {
+    studentId += 1;
+    return studentId;
+  };
+})();
+```
+
+###### Using an IIFE to Return an Object with Access to Private Data
+
+```javascript
+var inventory = (function() {
+  var stocks = [];
+  function isValid(newStock) {
+    return stocks.every(function(stock) {
+      return newStock.name !== stock.name;
+    }); 
+  }																					// everything above this is private
+
+  return { 
+    stockCounts: function() {
+      stocks.forEach(function(stock) {
+        console.log(stock.name + ': ' + String(stock.count));
+      });
+    },
+    addStock: function(newStock) {
+      if (isValid(newStock)) { stocks.push(newStock) }
+    },
+  };
+})();
+```
+
+
 
 #### Partial Function Application
 
@@ -587,10 +689,6 @@ applicatorFunction(37.2); // Performs primaryFunction('Hello', 37.2);
 // => Hello
 // => 37.2
 ```
-
-
-
-#### Creating a closure around some of the data
 
 ## Object creation patterns
 
