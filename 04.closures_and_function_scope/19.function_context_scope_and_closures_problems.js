@@ -1,13 +1,5 @@
-var person = {
-  firstName: 'Rick ',
-  lastName: 'Sanchez',
-  fullName: function() {
-    return this.firstName + this.lastName;
+function myBind(func, context) {
+  return function() {
+    return func.apply(context, arguments);
   }
-};
-
-console.log(person.fullName());
-
-// funciton: [fullName]
-
-// The function isn't invoked, so it just logs the function
+}

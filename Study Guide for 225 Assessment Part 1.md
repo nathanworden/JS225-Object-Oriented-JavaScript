@@ -238,7 +238,7 @@ var obj = {
 obj.foo();        // => undefined undefined
 ```
 
-Your instincts may tell you taht this code will log `"Hello world"` to the console.l Your instincts are wrong here. Even though `foo` executes within the `obj` context, the call to `bar` on line 9 does not provide an explicit context, which means that JavaScript binds the global object to the function. As a result, `this` on line 6 is the global object, not `obj`.
+Your instincts may tell you that this code will log `"Hello world"` to the console. Your instincts are wrong here. Even though `foo` executes within the `obj` context, the call to `bar` on line 9 does not provide an explicit context, which means that JavaScript binds the global object to the function. As a result, `this` on line 6 is the global object, not `obj`.
 
 This trap is insidious and well-known. Most developers consider it to be a mistake in the language design. If we provide the context to call `foo`, then the context *should* propagate to its internal functions. It doesn't, though, and it's hard to imagin how binding the function to the global object is ever useful.
 
