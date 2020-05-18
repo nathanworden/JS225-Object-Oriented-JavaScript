@@ -47,7 +47,7 @@
 
 Every time a JavaScript function is invoked, it has access to an object called the **execution context** of that function. This execution context is accessible through the keyword `this`. A JavaScript function can be invoked in a variety of ways. Which object `this` refers to depends on how the function was invoked.
 
-Note: Anywhere outside a functino, the keyword `this` is bound to the global object. If the `this` keyword is used inside a function, then its value depends on how the function was invoked.
+Note: Anywhere outside a function, the keyword `this` is bound to the global object. If the `this` keyword is used inside a function, then its value depends on how the function was invoked.
 
 #### Implicit function execution context
 
