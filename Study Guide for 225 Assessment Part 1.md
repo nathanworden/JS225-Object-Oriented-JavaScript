@@ -929,3 +929,74 @@ The `Object.prototype` object is on the top of all JavaScript objects' prototype
 
 #### OLOO and Pseudo-Classical patterns
 
+## The Pseudo-classical Pattern
+
+The Pseudo-classical pattern is a combination of the constructor pattern and the prototype pattern. With this pattern, we use a constructor to set object states, and put shared methods on the constructor function's prototype:
+
+```javascript
+var Point = function(x, y) {            // capitalized constructor name as a convention
+  this.x = x || 0;                      // initialize states with arguments
+  this.y = y || 0;                      // 0 as default value
+};
+
+Point.prototype.onXAxis = function() {  // shared behaviors added to constructor's prototype property
+  return this.y === 0;
+};
+
+Point.prototype.onYAxis = function() {  // these methods are added one by one
+  return this.x === 0;
+};
+
+Point.prototype.distanceToOrigin = function() {
+  return Math.sqrt((this.x * this.x) + (this.y * this.y));
+};
+
+var pointA = new Point(30, 40);         // use new to create objects
+var pointB = new Point(20);
+
+pointA instanceof Point;                // use instanceof to check type
+pointB instanceof Point;
+
+pointA.distanceToOrigin();              // 50
+pointB.onXAxis();                       // true
+```
+
+For additional examples, you can check out this article on [inheritance on MDN](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Inheritance). It has an example that shows how to create constructors that inherit features from "parent" classes. You can stop reading when you reach the ECMAScript 2015 Classes section.
+
+## The OLOO Pattern
+
+OLOO which stands for "Object Linking to Other Objects," was first popularized by Kyle Simpson. JavaScript sheds its pretense as a "class oriented" language, where it uses constructor functions as fake classes. Instead, it embraces its prototype based object model. With the OLOO pattern, we define the shared behaviors on a prototype object, then use `Object.create` to create objects that delegate directly from that object, without going through the roundabout way that involves "constructors and their prototype properties."
+
+```javascript
+var Point = {                       // capitalized name for the prototype as a convention
+  x: 0,                             // default value defined on the prototype
+  y: 0,
+
+  onXAxis: function() {             // shared methods defined on the prototype
+    return this.y === 0;
+  },
+
+  onYAxis: function() {
+    return this.x === 0;
+  },
+
+  distanceToOrigin: function() {
+    return Math.sqrt((this.x * this.x) + (this.y * this.y));
+  },
+
+  init: function(x, y) {            // optional init method to set states
+    this.x = x;
+    this.y = y;
+    return this;
+  },
+};
+
+var pointA = Object.create(Point).init(30, 40);
+var pointB = Object.create(Point);
+
+Point.isPrototypeOf(pointA);        // use isPrototypeOf to check type
+Point.isPrototypeOf(pointB);
+
+pointA.distanceToOrigin();          // 50
+pointB.onXAxis();                   // true
+```
