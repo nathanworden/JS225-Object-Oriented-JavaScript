@@ -1,17 +1,17 @@
-// var invoice = {
-//   phone: 3000,
-//   internet: 6500,
-// };
-// var payment = {
-//   phone: 1300,
-//   internet: 5500,
-// };
-// var invoiceTotal = invoice.phone + invoice.internet;
-// var paymentTotal = payment.phone + payment.internet;
-// var remainingDue = invoiceTotal - paymentTotal;
+var invoice = {
+  phone: 3000,
+  internet: 6500,
+};
+var payment = {
+  phone: 1300,
+  internet: 5500,
+};
+var invoiceTotal = invoice.phone + invoice.internet;
+var paymentTotal = payment.phone + payment.internet;
+var remainingDue = invoiceTotal - paymentTotal;
 
-// console.log(paymentTotal);         // => 6800
-// console.log(remainingDue);         // => 2700
+console.log(paymentTotal);         // => 6800
+console.log(remainingDue);         // => 2700
 
 
 function createInvoice(services) {
